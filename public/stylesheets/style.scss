@@ -1,0 +1,19 @@
+@import "./main.scss";
+@import "./waiting.scss";
+@import "./game.scss";
+@import "./end.scss";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  padding: 30px;
+}
+
+ul,
+ol {
+  list-style: none;
+}

@@ -1,0 +1,59 @@
+.board-wrap {
+  background-color: #03083b;
+  color: #ffffff;
+  width: 700px;
+  height: 1000px;
+  margin: 50px;
+  border-radius: 50px;
+
+  &__nav {
+    &__list {
+      display: flex;
+      text-align: center;
+      padding-top: 20px;
+      li {
+        width: 300px;
+        height: 50px;
+        font-size: 20px;
+        padding: 10px;
+        margin: 0 20px;
+      }
+    }
+  }
+
+  &__text {
+    text-align: center;
+    margin: 100px 50px;
+    font-size: 30px;
+  }
+
+  &__user {
+    margin: 100px 100px;
+    text-align: center;
+    margin-top: 100px;
+    margin-bottom: 50px;
+    font-size: 40px;
+
+    &__input {
+      width: 200px;
+      height: 50px;
+      font-size: 20px;
+    }
+  }
+  &__geton {
+    margin: 100px 100px;
+    text-align: center;
+    margin: 40px 100px;
+    font-size: 40px;
+
+    &__btn {
+      font-size: 20px;
+      width: 200px;
+      height: 50px;
+      border-radius: 20px;
+    }
+  }
+  &__img {
+    text-align: center;
+  }
+}

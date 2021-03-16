@@ -1,3 +1,4 @@
+import { _ } from "./util.js";
 export default class RenderManager {
   constructor(boardContainer) {
     this.$boardContainer = boardContainer;

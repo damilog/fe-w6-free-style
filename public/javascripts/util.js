@@ -1,6 +1,10 @@
 const _ = {
   $: (selector, base = document) => base.querySelector(selector),
   $All: (selector, base = document) => base.querySelectorAll(selector),
+  $Remove: selector => {
+    const el = _.$(`${selector}`);
+    el.remove();
+  },
 };
 
 //선택자에 해당하는 첫번째 element를 반환한다. 그럼 선택자로 해당 엘리먼트를 어떻게 조작?

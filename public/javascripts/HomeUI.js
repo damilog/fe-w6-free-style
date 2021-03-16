@@ -39,7 +39,8 @@ export default class HomeUI {
   }
 
   makeTemplate() {
-    return `<section class="board-wrap__text">
+    return `<div class="changeable-area">
+    <section class="board-wrap__text">
       <div class ="board-wrap__text__name">Daisy 님은,,</div>
       <div>어느 역에서 내리시나효?,,( ͡° ͜ʖ ͡°)</div>
     </section>
@@ -56,7 +57,7 @@ export default class HomeUI {
         width="700px"
         height="400px"
       />
-    </section>`;
+    </section></div>`;
   }
 
   getSocketSignal() {}

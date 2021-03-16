@@ -41,7 +41,7 @@ export default class HomeUI {
   makeTemplate() {
     return `<div class="changeable-area">
     <section class="board-wrap__text">
-      <div class ="board-wrap__text__name">Daisy 님은,,</div>
+      <div class ="board-wrap__text__name">______님은,,</div>
       <div>어느 역에서 내리시나효?,,( ͡° ͜ʖ ͡°)</div>
     </section>
     <section class="board-wrap__user">

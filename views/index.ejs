@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
   <head>
+    <meta charset="UTF-8" />
     <title>Daisy Metro</title>
     <link rel="stylesheet" href="/css/style.css" />
   </head>
   <body>
     <main>
-      <section class="board-wrap">
+      <article class="board-wrap">
         <nav class="board-wrap__nav">
           <ul class="board-wrap__nav__list">
             <li class="board-wrap__nav__state">역 내 상황 | 혼잡</li>
@@ -15,26 +16,26 @@
           </ul>
         </nav>
 
-        <div class="board-wrap__text">
+        <!-- <section class="board-wrap__text">
           Daisy 님은,,어느 역에서 내리시나효?,,( ͡° ͜ʖ ͡°)
-        </div>
-        <div class="board-wrap__user">
+        </section>
+        <section class="board-wrap__user">
           <input type="text" class="board-wrap__user__input" />
-        </div>
-        <div class="board-wrap__geton">
+        </section>
+        <section class="board-wrap__geton">
           <button class="board-wrap__geton__btn">승차하기</button>
-        </div>
-        <div class="board-wrap__img">
+        </section>
+        <section class="board-wrap__img">
           <img
             src="https://data.whicdn.com/images/342939916/original.gif"
             alt=""
             width="700px"
             height="400px"
           />
-        </div>
-      </section>
+        </section> -->
+      </article>
 
-      <section class="board-wrap">
+      <article class="board-wrap">
         <nav class="board-wrap__nav">
           <ul class="board-wrap__nav__list">
             <li class="board-wrap__nav_state_">역 내 상황 | 혼잡</li>
@@ -108,8 +109,9 @@
         <section class="board-wrap__start">
           <button class="board-wrap__start__btn">START</button>
         </section>
-      </section>
+      </article>
     </main>
+    <script src="/socket.io/socket.io.js"></script>
     <script type="module" src="/javascripts/main.js"></script>
   </body>
 </html>

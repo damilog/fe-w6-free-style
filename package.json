@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "concurrently \"nodemon ./bin/www \" \"sass --watch public/stylesheets:public/css\""
+    "start": "concurrently \"nodemon ./bin/www \" \"sass --watch public/stylesheets:public/css\"",
+    "new": "concurrently \"nodemon app.js \" \"sass --watch public/stylesheets:public/css\""
   },
   "dependencies": {
     "concurrently": "^6.0.0",

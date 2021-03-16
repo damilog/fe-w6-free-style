@@ -14,11 +14,11 @@ app.use("/", indexRouter);
 app.use("/lines", linesRouter);
 
 io.on("connection", socket => {
-  socket.emit("usercount", io.engine.clientsCount); //몇초마다 체크하게?
+  socket.emit("usercount", io.engine.clientsCount);
 
-  socket.on("message", msg => {
-    io.emit("message", msg);
-  });
+  // socket.on("message", msg => {
+  //   io.emit("message", msg);
+  // });
 });
 
 server.listen(3000, function () {

@@ -31,8 +31,16 @@ export default class WaitingRoomUI {
   async getStationListByLines() {
     const jsonData = await this.jsonManager.requestData("lines");
     this.stationListByLines = this.jsonManager.parseByLines(jsonData);
+    //this.saveLS("station", this.stationListByLines); 왜 그대로 저장안되지
     this.lineSize = Object.keys(this.stationListByLines).length;
   }
+  // saveLS(k, v) {
+  //   const key = k;
+  //   const value = v;
+  //   localStorage.setItem(key, value);
+  //   const test = localStorage.getItem("station");
+  //   console.log(test[0]);
+  // }
 
   drawLineInfoOnBtn() {
     for (let i = 1; i <= this.lineSize; i++) {

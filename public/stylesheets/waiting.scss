@@ -64,11 +64,10 @@ $line-colors: (
     font-size: 20px;
   }
 
-  &__text {
+  &__welcome {
     display: block;
     height: 100px;
-    // outline: springgreen solid;
-    padding: 35px;
+    padding-top: 15px;
     font-size: 25px;
     color: thistle;
   }

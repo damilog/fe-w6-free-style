@@ -10,18 +10,22 @@ export default class WaitingRoomUI {
     this.subwayJsonData = json;
     this.renderManager = new RenderManager(this.$boardContainer);
     this.jsonManager = new JSONManager();
+    this.socket = new SocketManager();
     this.stationListByLines;
     this.lineSize;
     this.init();
   }
 
   init() {
+    this.runSocket();
     _.$(".board-wrap__geton__btn").addEventListener(
       "click",
       this.drawWaitingRoom.bind(this)
     );
     this.getStationListByLines();
   }
+
+  runSocket() {}
 
   drawWaitingRoom() {
     _.$Remove(".changeable-area");
@@ -67,7 +71,6 @@ export default class WaitingRoomUI {
       "input",
       this.drawEnteredBetOnText.bind(this)
     );
-    //const gameUI = new GameUI($boardContainer, jsonData);
   }
 
   setSelectedLineData(event) {
@@ -106,6 +109,7 @@ export default class WaitingRoomUI {
         <span class="board-wrap__bet__title">벌칙 👉</span>
         <input type="text" class="board-wrap__bet__input" autofocus/>
         <button class="board-wrap__bet__btn">등록</button>
+        <span class="board-wrap__bet__welcome">Daisy 입장 대기중..</span>
       </section>
 
       <section class="board-wrap__lines">

@@ -14,11 +14,13 @@ app.use("/", indexRouter);
 app.use("/lines", linesRouter);
 
 io.on("connection", socket => {
-  socket.emit("usercount", io.engine.clientsCount);
+  console.log("user connected: ", socket.id);
+  socket.emit("usercount", io.engine.clientsCount); //유저 수 데이터 보냄
 
-  // socket.on("message", msg => {
-  //   io.emit("message", msg);
-  // });
+  socket.on("login", data => {
+    socket.name = data;
+    io.emit("login", data);
+  });
 });
 
 server.listen(3000, function () {

@@ -39,7 +39,7 @@ $line-colors: (
 
 .board-wrap__bet {
   //   outline: sandybrown solid;
-  height: 200px;
+  height: 100px;
   text-align: center;
   font-size: 20px;
   padding: 40px 20px;
@@ -72,7 +72,18 @@ $line-colors: (
     color: thistle;
   }
 }
-
+.board-wrap__state {
+  text-align: center;
+  font-size: 25px;
+  color: yellow;
+  &__bet-text,
+  &__bet-line {
+    height: 50px;
+  }
+  &__bet-text {
+    color: white;
+  }
+}
 .board-wrap__start {
   &__btn {
     height: 60px;

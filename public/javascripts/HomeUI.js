@@ -60,5 +60,5 @@ export default class HomeUI {
     </section></div>`;
   }
 
-  getSocketSignal() {}
+  //getSocketSignal() {}
 }

@@ -7,5 +7,4 @@ export default class RenderManager {
   renderAfterNav(template) {
     this.$boardContainer.insertAdjacentHTML("beforeend", template);
   }
-  
 }

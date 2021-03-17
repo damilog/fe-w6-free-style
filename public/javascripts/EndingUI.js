@@ -6,9 +6,9 @@ export default class EndingUI {
   constructor(boardContainer) {
     this.$boardContainer = boardContainer;
   }
-  
-  makeTemplate(){
-      return `<div class="changeable-area">
+
+  makeTemplate() {
+    return `<div class="changeable-area">
       <section class="board-wrap__text">
         <div class="board-wrap__text__name">______님은,,</div>
         <div>저희와 함께 하차하실 수 없습니다,,( ͡° ͜ʖ ͡°)</div>
@@ -32,5 +32,6 @@ export default class EndingUI {
           height="400px"
         />
       </section>
-    </div>`
+    </div>`;
   }
+}

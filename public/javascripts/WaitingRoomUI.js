@@ -2,10 +2,12 @@ import { _ } from "./util.js";
 import RenderManager from "./RenderManager.js";
 import SocketManager from "./SocketManager.js";
 import JSONManager from "./JSONManager.js";
+import GameUI from "./GameUI.js";
 
 export default class WaitingRoomUI {
-  constructor(boardContainer) {
+  constructor(boardContainer, json) {
     this.$boardContainer = boardContainer;
+    this.subwayJsonData = json;
     this.renderManager = new RenderManager(this.$boardContainer);
     this.jsonManager = new JSONManager();
     this.stationListByLines;
@@ -26,21 +28,19 @@ export default class WaitingRoomUI {
     this.renderManager.renderAfterNav(this.makeTemplate());
     this.drawLineInfoOnBtn.call(this);
     this.onEvent();
+    this.prepareNextPage();
+  }
+
+  prepareNextPage() {
+    const gameUI = new GameUI(this.$boardContainer, this.subwayJsonData);
   }
 
   async getStationListByLines() {
-    const jsonData = await this.jsonManager.requestData("lines");
-    this.stationListByLines = this.jsonManager.parseByLines(jsonData);
-    //this.saveLS("station", this.stationListByLines); 왜 그대로 저장안되지
+    this.stationListByLines = this.jsonManager.parseByLines(
+      this.subwayJsonData
+    );
     this.lineSize = Object.keys(this.stationListByLines).length;
   }
-  // saveLS(k, v) {
-  //   const key = k;
-  //   const value = v;
-  //   localStorage.setItem(key, value);
-  //   const test = localStorage.getItem("station");
-  //   console.log(test[0]);
-  // }
 
   drawLineInfoOnBtn() {
     for (let i = 1; i <= this.lineSize; i++) {
@@ -67,6 +67,7 @@ export default class WaitingRoomUI {
       "input",
       this.drawEnteredBetOnText.bind(this)
     );
+    //const gameUI = new GameUI($boardContainer, jsonData);
   }
 
   setSelectedLineData(event) {
@@ -89,11 +90,21 @@ export default class WaitingRoomUI {
     _.$(".board-wrap__state__bet-text").textContent = `👉${bet}`;
   }
 
+  makeLinesTemplate() {
+    const temp = `  <section class="board-wrap__lines">
+   <div class="board-wrap__lines__li" id="line1">
+     <span class="board-wrap__lines__li__title">1호선</span>
+     <span class="board-wrap__lines__li__text" id="line1-text"
+       ></span
+     >
+   </div>`;
+  }
+
   makeTemplate() {
     return `<div class="changeable-area">
     <section class="board-wrap__bet">
         <span class="board-wrap__bet__title">벌칙 👉</span>
-        <input type="text" class="board-wrap__bet__input" />
+        <input type="text" class="board-wrap__bet__input" autofocus/>
         <button class="board-wrap__bet__btn">등록</button>
       </section>
 

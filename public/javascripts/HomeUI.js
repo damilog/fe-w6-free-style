@@ -1,6 +1,7 @@
 import { _ } from "./util.js";
 import RenderManager from "./RenderManager.js";
 import SocketManager from "./SocketManager.js";
+import WaitingRoomUI from "./WaitingRoomUI.js";
 
 export default class HomeUI {
   constructor(boardContainer) {
@@ -42,10 +43,10 @@ export default class HomeUI {
     return `<div class="changeable-area">
     <section class="board-wrap__text">
       <div class ="board-wrap__text__name">______님은,,</div>
-      <div>어느 역에서 내리시나효?,,( ͡° ͜ʖ ͡°)</div>
+      <div>어느 역에서 내리시나효?,, ( ͡° ͜ʖ ͡°)</div>
     </section>
     <section class="board-wrap__user">
-      <input type="text" class="board-wrap__user__input" />
+      <input type="text" class="board-wrap__user__input" autofocus/>
     </section>
     <section class="board-wrap__geton">
       <button class="board-wrap__geton__btn">승차하기</button>
@@ -59,6 +60,4 @@ export default class HomeUI {
       />
     </section></div>`;
   }
-
-  //getSocketSignal() {}
 }

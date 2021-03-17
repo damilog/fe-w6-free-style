@@ -1,14 +1,48 @@
 import { _ } from "./util.js";
 import RenderManager from "./RenderManager.js";
 import SocketManager from "./SocketManager.js";
+import JSONManager from "./JSONManager.js";
+import EndingUI from "./EndingUI.js";
 
 export default class GameUI {
-  constructor(boardContainer) {
+  constructor(boardContainer, json) {
     this.$boardContainer = boardContainer;
+    this.subwayJsonData = json;
+    this.renderManager = new RenderManager(this.$boardContainer);
+    this.jsonManager = new JSONManager();
+    this.init();
   }
-  
-  makeTemplate(){
-      return `<div class="changeable-area">
+
+  init() {
+    _.$(".board-wrap__start__btn").addEventListener(
+      "click",
+      this.drawWaitingRoom.bind(this)
+    );
+  }
+
+  drawWaitingRoom() {
+    _.$Remove(".changeable-area");
+    this.renderManager.renderAfterNav(this.makeTemplate());
+    this.onEvent();
+    this.prepareNextPage();
+  }
+
+  drawEnteredStation() {}
+
+  isCorrect() {}
+
+  checkAnswer() {}
+
+  endGame() {}
+
+  prepareNextPage() {
+    const endingUI = new EndingUI(this.$boardContainer, this.subwayJsonData);
+  }
+
+  onEvent() {}
+
+  makeTemplate() {
+    return `<div class="changeable-area">
       <section class="borad-wrap__user">
         <ul class="borad-wrap__user__list">
           <li class="borad-wrap__user__list__li user-turn">Kyle</li>
@@ -48,5 +82,6 @@ export default class GameUI {
         <input type="text" class="board-wrap__answer__input" />
         <button class="board-wrap__answer__btn">하차</button>
       </section>
-    </div>`
+    </div>`;
   }
+}

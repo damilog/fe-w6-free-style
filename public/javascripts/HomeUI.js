@@ -1,20 +1,25 @@
 import { _ } from "./util.js";
 import RenderManager from "./RenderManager.js";
-import SocketManager from "./SocketManager.js";
 import WaitingRoomUI from "./WaitingRoomUI.js";
 
 export default class HomeUI {
-  constructor(boardContainer) {
+  constructor(boardContainer, json) {
     this.$boardContainer = boardContainer;
+    this.subwayJsonData = json;
+    this.socket = io();
     this.$userCount = _.$(".board-wrap__nav__passenger");
-    this.renderManager = new RenderManager(this.$boardContainer);
-    this.socket = new SocketManager();
+    this.userName;
+    this.renderManager = new RenderManager();
     this.init();
   }
 
   init() {
-    this.renderManager.renderAfterNav(this.makeTemplate());
-    this.runSocket();
+    this.renderManager.renderLastChild(
+      this.$boardContainer,
+      this.makeTemplate()
+    );
+    this.prepareNextPage();
+    this.socket.on("usercount", data => this.drawUserCount(data));
     this.onEvent();
   }
 
@@ -23,10 +28,17 @@ export default class HomeUI {
       "input",
       this.drawUserName.bind(this)
     );
+
+    _.$(".board-wrap__geton__btn").addEventListener("click", () => {
+      this.socket.emit("login", this.userName); //유저 이름을 서버에 보냄
+    });
   }
 
-  runSocket() {
-    this.socket.onSocket("usercount", this.drawUserCount.bind(this));
+  prepareNextPage() {
+    const waitingRoomUI = new WaitingRoomUI(
+      this.$boardContainer,
+      this.subwayJsonData
+    );
   }
 
   drawUserCount(count) {
@@ -34,9 +46,9 @@ export default class HomeUI {
   }
 
   drawUserName() {
-    const name = _.$(".board-wrap__user__input").value;
+    this.userName = _.$(".board-wrap__user__input").value;
     const $userNameText = _.$(".board-wrap__text__name");
-    $userNameText.textContent = `${name} 님은,,`;
+    $userNameText.textContent = `${this.userName} 님은,,`;
   }
 
   makeTemplate() {

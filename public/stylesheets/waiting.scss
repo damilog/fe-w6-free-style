@@ -57,13 +57,6 @@ $line-colors: (
     margin: 0px 30px;
   }
 
-  &__btn {
-    height: 50px;
-    width: 100px;
-    margin: 0px 30px;
-    font-size: 20px;
-  }
-
   &__welcome {
     display: block;
     height: 100px;
@@ -88,7 +81,15 @@ $line-colors: (
   &__btn {
     height: 60px;
     width: 200px;
-    margin: 0px 250px;
+    margin: 10px 250px;
+    font-size: 20px;
+    background: rgb(255, 234, 118);
+  }
+
+  &__submit {
+    height: 60px;
+    width: 200px;
+    margin: 10px 250px;
     font-size: 20px;
   }
 }

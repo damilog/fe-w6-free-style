@@ -1,35 +1,54 @@
 import { _ } from "./util.js";
 import RenderManager from "./RenderManager.js";
-import SocketManager from "./SocketManager.js";
-import JSONManager from "./JSONManager.js";
 import GameUI from "./GameUI.js";
 
 export default class WaitingRoomUI {
   constructor(boardContainer, json) {
     this.$boardContainer = boardContainer;
     this.subwayJsonData = json;
-    this.renderManager = new RenderManager(this.$boardContainer);
-    this.jsonManager = new JSONManager();
-    this.socket = new SocketManager();
-    this.stationListByLines;
+    this.renderManager = new RenderManager();
     this.lineSize;
+    this.bet;
+    this.lineNum;
     this.init();
   }
 
   init() {
-    this.runSocket();
     _.$(".board-wrap__geton__btn").addEventListener(
       "click",
-      this.drawWaitingRoom.bind(this)
+      this.drawWaitingRoom.bind(this) //draw 전에 포괄할만한 메소드필요
     );
     this.getStationListByLines();
   }
 
-  runSocket() {}
+  socketOnWaitingUser() {
+    const socket = io();
+    socket.on("waitingUser", function (data) {
+      _.$(".board-wrap__bet__welcome").textContent = `${data} 입장 대기중..`;
+      console.log("클라이언트", data);
+    });
+    //this.socket.on("waitingUser", this.drawWaitingUser(data)); //왜 이렇게 하면 실행이 안될까?
+  }
+
+  socketEmitSettingGame() {
+    const socket = io();
+    const setting = { bet: this.bet, line: this.lineNum };
+    socket.emit("settingGame", setting);
+  }
+
+  drawWaitingUser(name) {
+    console.log(name);
+    _.$(".board-wrap__bet__welcome").textContent = `${name} 입장 대기중..`;
+  }
 
   drawWaitingRoom() {
     _.$Remove(".changeable-area");
-    this.renderManager.renderAfterNav(this.makeTemplate());
+    this.renderManager.renderLastChild(
+      this.$boardContainer,
+      this.makeTemplate()
+    );
+    //여기부터 분리필요
+    this.socketOnWaitingUser();
     this.drawLineInfoOnBtn.call(this);
     this.onEvent();
     this.prepareNextPage();
@@ -39,37 +58,30 @@ export default class WaitingRoomUI {
     const gameUI = new GameUI(this.$boardContainer, this.subwayJsonData);
   }
 
-  async getStationListByLines() {
-    this.stationListByLines = this.jsonManager.parseByLines(
-      this.subwayJsonData
-    );
-    this.lineSize = Object.keys(this.stationListByLines).length;
+  getStationListByLines() {
+    this.lineSize = Object.keys(this.subwayJsonData).length;
   }
 
   drawLineInfoOnBtn() {
     for (let i = 1; i <= this.lineSize; i++) {
       const $currentBtnText = _.$(`#line${i}-text`);
-      const currentLineSize = this.stationListByLines[`0${i}호선`].length;
+      const currentLineSize = this.subwayJsonData[`0${i}호선`].length;
       $currentBtnText.textContent = `${currentLineSize}개역`;
     }
   }
 
   onEvent() {
-    this.addLineBtnClickEvent.call(this);
-    this.addBetInputEvent.call(this);
-  }
-
-  addLineBtnClickEvent() {
     _.$(".board-wrap__lines").addEventListener(
       "click",
       this.setSelectedLineData.bind(this)
     );
-  }
-
-  addBetInputEvent() {
     _.$(".board-wrap__bet__input").addEventListener(
       "input",
       this.drawEnteredBetOnText.bind(this)
+    );
+    _.$(".board-wrap__start__submit").addEventListener(
+      "click",
+      this.socketEmitSettingGame.bind(this)
     );
   }
 
@@ -78,7 +90,9 @@ export default class WaitingRoomUI {
     const currentClickedLineBtn = event.target.closest(
       ".board-wrap__lines__li"
     );
+
     const lineNumber = currentClickedLineBtn.id.replace("line", "");
+    this.lineNum = lineNumber;
     this.drawSelectedLineInfoOnText(lineNumber);
   }
 
@@ -90,17 +104,8 @@ export default class WaitingRoomUI {
 
   drawEnteredBetOnText() {
     const bet = _.$(".board-wrap__bet__input").value;
+    this.bet = bet;
     _.$(".board-wrap__state__bet-text").textContent = `👉${bet}`;
-  }
-
-  makeLinesTemplate() {
-    const temp = `  <section class="board-wrap__lines">
-   <div class="board-wrap__lines__li" id="line1">
-     <span class="board-wrap__lines__li__title">1호선</span>
-     <span class="board-wrap__lines__li__text" id="line1-text"
-       ></span
-     >
-   </div>`;
   }
 
   makeTemplate() {
@@ -108,7 +113,6 @@ export default class WaitingRoomUI {
     <section class="board-wrap__bet">
         <span class="board-wrap__bet__title">벌칙 👉</span>
         <input type="text" class="board-wrap__bet__input" autofocus/>
-        <button class="board-wrap__bet__btn">등록</button>
         <span class="board-wrap__bet__welcome">Daisy 입장 대기중..</span>
       </section>
 
@@ -171,8 +175,10 @@ export default class WaitingRoomUI {
       <section class="board-wrap__state">
       <div class ="board-wrap__state__bet-text"></div>
       <div class ="board-wrap__state__bet-line"></div>
+      
     </section>
       <section class="board-wrap__start">
+        <button class="board-wrap__start__submit">등록</button>
         <button class="board-wrap__start__btn">START</button>
       </section></div>`;
   }

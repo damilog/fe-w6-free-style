@@ -13,14 +13,30 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", indexRouter);
 app.use("/lines", linesRouter);
 
+const userList = [];
+let user;
+let setting;
+
 io.on("connection", socket => {
   console.log("user connected: ", socket.id);
   socket.emit("usercount", io.engine.clientsCount); //유저 수 데이터 보냄
 
   socket.on("login", data => {
+    user = data;
+    userList.push(user);
+    console.log(userList);
+    console.log("서버", user);
     socket.name = data;
-    io.emit("login", data);
   });
+
+  socket.on("settingGame", data => {
+    setting = data;
+    console.log("settingGame", setting);
+  });
+
+  socket.emit("waitingUser", user);
+  socket.emit("loadSettingGame", setting);
+  socket.emit("userList", userList);
 });
 
 server.listen(3000, function () {

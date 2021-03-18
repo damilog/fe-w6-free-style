@@ -36,11 +36,6 @@ export default class WaitingRoomUI {
     socket.emit("settingGame", setting);
   }
 
-  drawWaitingUser(name) {
-    console.log(name);
-    _.$(".board-wrap__bet__welcome").textContent = `${name} 입장 대기중..`;
-  }
-
   drawWaitingRoom() {
     _.$Remove(".changeable-area");
     this.renderManager.renderLastChild(

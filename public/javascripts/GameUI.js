@@ -28,30 +28,68 @@ export default class GameUI {
       this.$boardContainer,
       this.makeTemplate()
     );
-    this.onEvent();
 
-    await this.socketOnloadSettingGame.call(this);
-    const userList = await this.socketOnUserList.call(this);
-    this.drawUserList.call(this, userList); //얘도 undefined
+    this.socketOnWaitingUser();
+    this.socketOnloadSettingGame();
+    this.socketOnUserList();
+
+    this.onEvent();
+  }
+
+  onEvent() {
+    _.$(".board-wrap__answer__btn").addEventListener(
+      "click",
+      this.checkEnteredStation.bind(this) //
+    );
+  }
+
+  checkEnteredStation() {
+    //this 바인딩이 왜안될까? this.line이 undefined로 찍힘
+    console.log(this.line);
+    const $blockWrap = _.$(".borad-wrap__game__wrap");
+    const currentInput = _.$(".board-wrap__answer__input").value;
+    const stationBlockTemplate = this.makeEnteredStationElem(
+      this.line,
+      currentInput
+    );
+    this.renderManager.renderLastChild($blockWrap, stationBlockTemplate);
+    // this.isCorrect();
+    // if (!this.isCorrect(currentInput))
+    //   paintIncorrectStationBlock(_.$(".borad-wrap__game__wrap__line"));
   }
 
   socketOnloadSettingGame() {
+    //문제1
     const socket = io();
+    console.log("문제1", socket.id);
     socket.on("loadSettingGame", function ({ line, bet }) {
-      this.line = line;
+      this.line = line; //this.line 여기서 호출하면 되긴됨.. 근데 여기서 왜 함수 실행안됨?
       this.bet = bet;
+      console.log(this.line, this.bet);
     });
   }
 
   socketOnUserList() {
+    //유저등록
+    //문제2
     const socket = io();
-    let userList;
-    socket.on("userList", function (data) {
-      //   this.userList = data;
-      userList = data;
-      console.log(userList);
+    console.log(socket.id);
+    socket.on("userList", function (users) {
+      this.userList = users; //이게 안됨 내부에서 this를 쓰지말자 .. ㅎㅎ
+      const template = users.reduce((acc, user) => {
+        return acc + `<li class="borad-wrap__user__list__li">${user}</li>`;
+      }, "");
+      const $wrap = _.$(".borad-wrap__user__list");
+      $wrap.insertAdjacentHTML("beforeend", template); //innerHTML(template);
     });
-    return userList;
+  }
+
+  socketOnWaitingUser() {
+    const socket = io();
+    socket.on("waitingUser", function (data) {
+      _.$(".board-wrap__answer__user").textContent = `${data}`;
+      console.log("클라이언트", data);
+    });
   }
 
   drawUserList(data) {
@@ -67,21 +105,6 @@ export default class GameUI {
   setCountDown() {}
   changeTurn() {}
 
-  checkEnteredStation() {
-    //this 바인딩이 왜안될까? this.line이 undefined로 찍힘
-    console.log(this.line);
-    const $blockWrap = _.$(".borad-wrap__game__wrap");
-    const currentInput = _.$(".board-wrap__answer__input").value;
-    const stationBlockTemplate = this.makeEnteredStationElem(
-      this.line,
-      currentInput
-    );
-    this.renderManager.renderLastChild($blockWrap, stationBlockTemplate);
-    this.isCorrect();
-    // if (!this.isCorrect(currentInput))
-    //   paintIncorrectStationBlock(_.$(".borad-wrap__game__wrap__line"));
-  }
-
   paintIncorrectStationBlock(el) {
     el.classList.add(`incorrect-answer`);
   }
@@ -95,14 +118,9 @@ export default class GameUI {
     const endingUI = new EndingUI(this.$boardContainer, this.subwayJsonData);
   }
 
-  onEvent() {
-    _.$(".board-wrap__answer__btn").addEventListener(
-      "click",
-      this.checkEnteredStation.bind(this)
-    );
+  changeInputDisable(elem) {
+    elem.classList.add("incorrect-answer");
   }
-
-  changeInputDisable() {}
 
   makeTemplate() {
     return `<div class="changeable-area">

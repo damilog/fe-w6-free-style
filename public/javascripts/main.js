@@ -12,3 +12,6 @@ async function init() {
 }
 
 init();
+
+const socket = io();
+console.log("main", socket.id);

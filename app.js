@@ -14,6 +14,7 @@ app.use("/", indexRouter);
 app.use("/lines", linesRouter);
 
 const userList = [];
+const answerList = [];
 let user;
 let setting;
 
@@ -24,14 +25,16 @@ io.on("connection", socket => {
   socket.on("login", data => {
     user = data;
     userList.push(user);
-    console.log(userList);
-    console.log("서버", user);
     socket.name = data;
   });
 
   socket.on("settingGame", data => {
     setting = data;
-    console.log("settingGame", setting);
+  });
+
+  socket.on("answer", data => {
+    answerList.push(data);
+    socket.emit("answerList", answerList);
   });
 
   socket.emit("waitingUser", user);

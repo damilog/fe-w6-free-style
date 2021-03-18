@@ -3,12 +3,12 @@ import RenderManager from "./RenderManager.js";
 import EndingUI from "./EndingUI.js";
 
 export default class GameUI {
-  constructor(boardContainer, json) {
+  constructor(boardContainer, json, line, bet) {
     this.$boardContainer = boardContainer;
     this.subwayJsonData = json;
     this.renderManager = new RenderManager();
-    this.line;
-    this.bet;
+    this.line = line;
+    this.bet = bet;
     this.userList;
     this.init();
   }
@@ -44,36 +44,32 @@ export default class GameUI {
   }
 
   checkEnteredStation() {
-    //this 바인딩이 왜안될까? this.line이 undefined로 찍힘
-    console.log(this.line);
     const $blockWrap = _.$(".borad-wrap__game__wrap");
     const currentInput = _.$(".board-wrap__answer__input").value;
-    const stationBlockTemplate = this.makeEnteredStationElem(
-      this.line,
-      currentInput
-    );
-    this.renderManager.renderLastChild($blockWrap, stationBlockTemplate);
+
+    const template = `<div class="borad-wrap__game__wrap__line line${this.line}">
+    <span class="borad-wrap__game__wrap__line__text">
+      ${currentInput}
+    </span>
+  </div> `;
+    $blockWrap.insertAdjacentHTML("beforeend", template);
+
     // this.isCorrect();
     // if (!this.isCorrect(currentInput))
     //   paintIncorrectStationBlock(_.$(".borad-wrap__game__wrap__line"));
   }
 
   socketOnloadSettingGame() {
-    //문제1
     const socket = io();
-    console.log("문제1", socket.id);
     socket.on("loadSettingGame", function ({ line, bet }) {
-      this.line = line; //this.line 여기서 호출하면 되긴됨.. 근데 여기서 왜 함수 실행안됨?
-      this.bet = bet;
-      console.log(this.line, this.bet);
+      //   this.line = line; 여기 안먹힘;
+      //   this.bet = bet;
     });
   }
 
   socketOnUserList() {
-    //유저등록
-    //문제2
     const socket = io();
-    console.log(socket.id);
+
     socket.on("userList", function (users) {
       this.userList = users; //이게 안됨 내부에서 this를 쓰지말자 .. ㅎㅎ
       const template = users.reduce((acc, user) => {
@@ -88,8 +84,17 @@ export default class GameUI {
     const socket = io();
     socket.on("waitingUser", function (data) {
       _.$(".board-wrap__answer__user").textContent = `${data}`;
-      console.log("클라이언트", data);
     });
+  }
+
+  socketEmitAnswer(input) {
+    const socket = io();
+    socket.emit("answer", input);
+  }
+
+  socketOnAnswerList(input) {
+    const socket = io();
+    socket.on("answerList", function (answerList) {});
   }
 
   drawUserList(data) {
@@ -102,8 +107,6 @@ export default class GameUI {
       return acc + `<li class="borad-wrap__user__list__li">${user}</li>`;
     }, "");
   }
-  setCountDown() {}
-  changeTurn() {}
 
   paintIncorrectStationBlock(el) {
     el.classList.add(`incorrect-answer`);
@@ -111,7 +114,6 @@ export default class GameUI {
 
   isCorrect(answer) {
     return this.subwayJsonData[`0${this.line}호선`].includes(answer);
-    //배열안에 없는 스테이션이면~
   }
 
   prepareNextPage() {
@@ -126,17 +128,10 @@ export default class GameUI {
     return `<div class="changeable-area">
       <section class="borad-wrap__user">
         <ul class="borad-wrap__user__list">
-          <li class="borad-wrap__user__list__li user-turn">Kyle</li>
         </ul>
       </section>
       <section class="borad-wrap__game">
         <div class="borad-wrap__game__wrap">
-          <div class="borad-wrap__game__wrap__line line1 incorrect-answer">
-            <span class="borad-wrap__game__wrap__line__text">
-              구로디지털단지
-            </span>
-          </div>
-      
         </div>
       </section>
       <section class="board-wrap__answer">

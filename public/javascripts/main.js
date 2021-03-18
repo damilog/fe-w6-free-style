@@ -1,6 +1,5 @@
 import { _ } from "./util.js";
 import JSONManager from "./JSONManager.js";
-// import SocketManager from "./SocketManager.js";
 import HomeUI from "./HomeUI.js";
 
 async function init() {
@@ -12,6 +11,3 @@ async function init() {
 }
 
 init();
-
-const socket = io();
-console.log("main", socket.id);

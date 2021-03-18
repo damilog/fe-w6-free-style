@@ -25,9 +25,7 @@ export default class WaitingRoomUI {
     const socket = io();
     socket.on("waitingUser", function (data) {
       _.$(".board-wrap__bet__welcome").textContent = `${data} 입장 대기중..`;
-      console.log("클라이언트", data);
     });
-    //this.socket.on("waitingUser", this.drawWaitingUser(data)); //왜 이렇게 하면 실행이 안될까?
   }
 
   socketEmitSettingGame() {
@@ -46,11 +44,16 @@ export default class WaitingRoomUI {
     this.socketOnWaitingUser();
     this.drawLineInfoOnBtn.call(this);
     this.onEvent();
-    this.prepareNextPage();
+    // this.prepareNextPage(); 원래 있던 곳..
   }
 
   prepareNextPage() {
-    const gameUI = new GameUI(this.$boardContainer, this.subwayJsonData);
+    const gameUI = new GameUI(
+      this.$boardContainer,
+      this.subwayJsonData,
+      this.lineNum, //undefined?gg
+      this.bet
+    );
   }
 
   getStationListByLines() {
@@ -89,6 +92,7 @@ export default class WaitingRoomUI {
     const lineNumber = currentClickedLineBtn.id.replace("line", "");
     this.lineNum = lineNumber;
     this.drawSelectedLineInfoOnText(lineNumber);
+    this.prepareNextPage(); //뜬금 없지만 여기서 호출해야 line number가 할당된 this.line을 다음 페이지에 넘겨줄 수 있어서 여기서 호출했습니다..
   }
 
   drawSelectedLineInfoOnText(lineNum) {

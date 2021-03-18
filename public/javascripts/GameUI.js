@@ -46,17 +46,18 @@ export default class GameUI {
   checkEnteredStation() {
     const $blockWrap = _.$(".borad-wrap__game__wrap");
     const currentInput = _.$(".board-wrap__answer__input").value;
+    let incorrectAnswerClass;
+    !this.isCorrect(currentInput)
+      ? (incorrectAnswerClass = "incorrect-answer")
+      : (incorrectAnswerClass = "");
 
-    const template = `<div class="borad-wrap__game__wrap__line line${this.line}">
+    const template = `<div class="borad-wrap__game__wrap__line line${this.line} ${incorrectAnswerClass}">
     <span class="borad-wrap__game__wrap__line__text">
       ${currentInput}
     </span>
   </div> `;
-    $blockWrap.insertAdjacentHTML("beforeend", template);
 
-    // this.isCorrect();
-    // if (!this.isCorrect(currentInput))
-    //   paintIncorrectStationBlock(_.$(".borad-wrap__game__wrap__line"));
+    $blockWrap.insertAdjacentHTML("beforeend", template);
   }
 
   socketOnloadSettingGame() {
@@ -106,10 +107,6 @@ export default class GameUI {
     return users.reduce((acc, user) => {
       return acc + `<li class="borad-wrap__user__list__li">${user}</li>`;
     }, "");
-  }
-
-  paintIncorrectStationBlock(el) {
-    el.classList.add(`incorrect-answer`);
   }
 
   isCorrect(answer) {

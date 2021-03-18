@@ -1,80 +1,137 @@
 import { _ } from "./util.js";
 import RenderManager from "./RenderManager.js";
-import SocketManager from "./SocketManager.js";
-import JSONManager from "./JSONManager.js";
 import EndingUI from "./EndingUI.js";
 
 export default class GameUI {
-  constructor(boardContainer, json) {
+  constructor(boardContainer, json, line, bet) {
     this.$boardContainer = boardContainer;
     this.subwayJsonData = json;
-    this.renderManager = new RenderManager(this.$boardContainer);
-    this.jsonManager = new JSONManager();
+    this.renderManager = new RenderManager();
+    this.line = line;
+    this.bet = bet;
+    this.userList;
     this.init();
   }
 
   init() {
     _.$(".board-wrap__start__btn").addEventListener(
       "click",
-      this.drawWaitingRoom.bind(this)
+      this.drawGame.bind(this)
     );
-  }
 
-  drawWaitingRoom() {
-    _.$Remove(".changeable-area");
-    this.renderManager.renderAfterNav(this.makeTemplate());
-    this.onEvent();
     this.prepareNextPage();
   }
 
-  drawEnteredStation() {}
+  async drawGame() {
+    _.$Remove(".changeable-area");
+    this.renderManager.renderLastChild(
+      this.$boardContainer,
+      this.makeTemplate()
+    );
 
-  isCorrect() {}
+    this.socketOnWaitingUser();
+    this.socketOnloadSettingGame();
+    this.socketOnUserList();
 
-  checkAnswer() {}
+    this.onEvent();
+  }
 
-  endGame() {}
+  onEvent() {
+    _.$(".board-wrap__answer__btn").addEventListener(
+      "click",
+      this.checkEnteredStation.bind(this) //
+    );
+  }
+
+  checkEnteredStation() {
+    const $blockWrap = _.$(".borad-wrap__game__wrap");
+    const currentInput = _.$(".board-wrap__answer__input").value;
+
+    const template = `<div class="borad-wrap__game__wrap__line line${this.line}">
+    <span class="borad-wrap__game__wrap__line__text">
+      ${currentInput}
+    </span>
+  </div> `;
+    $blockWrap.insertAdjacentHTML("beforeend", template);
+
+    // this.isCorrect();
+    // if (!this.isCorrect(currentInput))
+    //   paintIncorrectStationBlock(_.$(".borad-wrap__game__wrap__line"));
+  }
+
+  socketOnloadSettingGame() {
+    const socket = io();
+    socket.on("loadSettingGame", function ({ line, bet }) {
+      //   this.line = line; 여기 안먹힘;
+      //   this.bet = bet;
+    });
+  }
+
+  socketOnUserList() {
+    const socket = io();
+
+    socket.on("userList", function (users) {
+      this.userList = users; //이게 안됨 내부에서 this를 쓰지말자 .. ㅎㅎ
+      const template = users.reduce((acc, user) => {
+        return acc + `<li class="borad-wrap__user__list__li">${user}</li>`;
+      }, "");
+      const $wrap = _.$(".borad-wrap__user__list");
+      $wrap.insertAdjacentHTML("beforeend", template); //innerHTML(template);
+    });
+  }
+
+  socketOnWaitingUser() {
+    const socket = io();
+    socket.on("waitingUser", function (data) {
+      _.$(".board-wrap__answer__user").textContent = `${data}`;
+    });
+  }
+
+  socketEmitAnswer(input) {
+    const socket = io();
+    socket.emit("answer", input);
+  }
+
+  socketOnAnswerList(input) {
+    const socket = io();
+    socket.on("answerList", function (answerList) {});
+  }
+
+  drawUserList(data) {
+    const userListTemplate = this.drawUserInGame(data);
+    _.$(".wrap__user__list").innerHTML(userListTemplate);
+  }
+
+  drawUserInGame(users) {
+    return users.reduce((acc, user) => {
+      return acc + `<li class="borad-wrap__user__list__li">${user}</li>`;
+    }, "");
+  }
+
+  paintIncorrectStationBlock(el) {
+    el.classList.add(`incorrect-answer`);
+  }
+
+  isCorrect(answer) {
+    return this.subwayJsonData[`0${this.line}호선`].includes(answer);
+  }
 
   prepareNextPage() {
     const endingUI = new EndingUI(this.$boardContainer, this.subwayJsonData);
   }
 
-  onEvent() {}
+  changeInputDisable(elem) {
+    elem.classList.add("incorrect-answer");
+  }
 
   makeTemplate() {
     return `<div class="changeable-area">
       <section class="borad-wrap__user">
         <ul class="borad-wrap__user__list">
-          <li class="borad-wrap__user__list__li user-turn">Kyle</li>
-          <li class="borad-wrap__user__list__li">Autumn</li>
-          <li class="borad-wrap__user__list__li">Racoon</li>
-          <li class="borad-wrap__user__list__li">Daisy</li>
-          <li class="borad-wrap__user__list__li">Jenny</li>
-          <li class="borad-wrap__user__list__li">Beemo</li>
-          <li class="borad-wrap__user__list__li">Sienna</li>
         </ul>
       </section>
       <section class="borad-wrap__game">
         <div class="borad-wrap__game__wrap">
-          <div class="borad-wrap__game__wrap__line line1 incorrect-answer">
-            <span class="borad-wrap__game__wrap__line__text">
-              구로디지털단지
-            </span>
-          </div>
-          <div class="borad-wrap__game__wrap__line line1">
-            <span class="borad-wrap__game__wrap__line__text">
-              동대문역사문화공원
-            </span>
-          </div>
-          <div class="borad-wrap__game__wrap__line line1">
-            <span class="borad-wrap__game__wrap__line__text"> 신도림 </span>
-          </div>
-          <div class="borad-wrap__game__wrap__line line1">
-            <span class="borad-wrap__game__wrap__line__text"> 신도림 </span>
-          </div>
-          <div class="borad-wrap__game__wrap__line line1">
-            <span class="borad-wrap__game__wrap__line__text"> 신도림 </span>
-          </div>
         </div>
       </section>
       <section class="board-wrap__answer">

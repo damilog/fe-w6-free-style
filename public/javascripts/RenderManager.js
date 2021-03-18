@@ -1,10 +1,8 @@
 import { _ } from "./util.js";
 export default class RenderManager {
-  constructor(boardContainer) {
-    this.$boardContainer = boardContainer;
-  }
+  constructor() {}
 
-  renderAfterNav(template) {
-    this.$boardContainer.insertAdjacentHTML("beforeend", template);
+  renderLastChild(parent, template) {
+    parent.insertAdjacentHTML("beforeend", template);
   }
 }

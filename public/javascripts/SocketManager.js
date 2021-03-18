@@ -3,15 +3,13 @@ export default class SocketManager {
     this.socket = io();
   }
 
-  onSocket(evt, fn) {
+  onData(evt, fn) {
     this.socket.on(evt, value => {
       fn(value);
     });
   }
 
-  emitSocket(evt, fn) {
-    this.socket.emit(evt, value => {
-      fn(value);
-    });
+  emitData(evt, data) {
+    this.socket.emit(evt, data);
   }
 }

@@ -39,7 +39,7 @@ $line-colors: (
 
 .board-wrap__bet {
   //   outline: sandybrown solid;
-  height: 200px;
+  height: 100px;
   text-align: center;
   font-size: 20px;
   padding: 40px 20px;
@@ -52,7 +52,8 @@ $line-colors: (
   &__input {
     width: 300px;
     height: 50px;
-    font-size: 20px;
+    font-size: 30px;
+    padding: 0px 20px;
     margin: 0px 30px;
   }
 
@@ -63,16 +64,26 @@ $line-colors: (
     font-size: 20px;
   }
 
-  &__text {
+  &__welcome {
     display: block;
     height: 100px;
-    // outline: springgreen solid;
-    padding: 35px;
+    padding-top: 15px;
     font-size: 25px;
     color: thistle;
   }
 }
-
+.board-wrap__state {
+  text-align: center;
+  font-size: 25px;
+  color: yellow;
+  &__bet-text,
+  &__bet-line {
+    height: 50px;
+  }
+  &__bet-text {
+    color: white;
+  }
+}
 .board-wrap__start {
   &__btn {
     height: 60px;

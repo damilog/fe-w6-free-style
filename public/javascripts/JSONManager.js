@@ -2,12 +2,27 @@ import { _ } from "./util.js";
 export default class JSONManager {
   constructor() {
     this.server = "http://localhost:3000";
+    this.stationList;
+    this.responseData;
   }
 
-  async request(url) {
-    const response = await fetch(`${this.server}/${url}`);
-    console.log(response.json());
+  requestData(url) {
+    return fetch(`${this.server}/${url}`).then(res => res.json());
   }
 
-  parseBySubwayLines(data) {}
+  parseByLines(data) {
+    const stationList = {};
+    data.forEach(x => {
+      const currentLine = x["line_num"];
+      stationList[currentLine] = [];
+    });
+
+    data.forEach(x => {
+      const currentLine = x["line_num"];
+      const currentStation = x["station_nm"];
+      stationList[currentLine].push(currentStation);
+    });
+
+    return stationList;
+  }
 }

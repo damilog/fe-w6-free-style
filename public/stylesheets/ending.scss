@@ -1,0 +1,22 @@
+.board-wrap__result {
+  &__text {
+    height: 90px;
+    background-color: rgb(162, 97, 247);
+    border: 5px #5401c0 solid;
+    border-radius: 20px;
+    text-align: center;
+    font-size: 25px;
+    padding: 6px;
+    margin: 0px 100px;
+    color: rgb(250, 239, 93);
+
+    &__bet {
+      display: block;
+    }
+
+    &__user {
+      display: block;
+      color: rgb(35, 255, 6);
+    }
+  }
+}

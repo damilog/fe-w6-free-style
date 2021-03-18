@@ -4,8 +4,14 @@ export default class SocketManager {
   }
 
   onSocket(evt, fn) {
-    this.socket.on(evt, count => {
-      fn(count);
+    this.socket.on(evt, value => {
+      fn(value);
+    });
+  }
+
+  emitSocket(evt, fn) {
+    this.socket.emit(evt, value => {
+      fn(value);
     });
   }
 }

@@ -1,0 +1,102 @@
+$line-colors: (
+  #0d3692,
+  #33a23d,
+  #fe5b10,
+  #32a1c8,
+  #8b50a4,
+  #c55c1d,
+  #54640d,
+  #f51361,
+  #aa9872
+);
+
+@each $line-color in $line-colors {
+  $i: index($line-colors, $line-color);
+  .line#{$i} {
+    background-color: $line-color;
+  }
+}
+
+.borad-wrap__user {
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 60px;
+    text-align: center;
+    padding: 10px;
+    &__li {
+      padding: 10px 20px;
+      margin: 10px;
+      background-color: white;
+      border: 1px white solid;
+      font-size: 20x;
+      color: black;
+      border-radius: 20px;
+    }
+  }
+}
+
+.borad-wrap__game {
+  height: 600px;
+
+  &__wrap {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 80px;
+    text-align: center;
+    padding: 10px 30px;
+    background-color: rgb(186, 238, 238);
+    border-radius: 10px;
+    margin: 20px;
+    height: 600px;
+
+    &__line {
+      display: inline-block;
+      width: 180px;
+      padding: 17px 10px;
+      margin: 10px;
+
+      &__text {
+        font-size: 20px;
+        text-align: center;
+      }
+    }
+  }
+}
+
+.board-wrap__answer {
+  height: 150px;
+  text-align: center;
+
+  &__user,
+  &__input,
+  &__btn {
+    padding: 10px;
+    font-size: 20px;
+    margin: 20px;
+  }
+  &__user {
+    font-size: 30px;
+  }
+
+  &__btn {
+    width: 100px;
+    height: 50px;
+    border-radius: 25px;
+  }
+}
+
+.board-wrap__result {
+  &__text {
+  }
+}
+
+.user-turn {
+  background-color: rgb(135, 74, 248);
+  color: white;
+}
+
+.incorrect-answer {
+  background-color: rgb(245, 61, 48);
+  color: white;
+}

@@ -2,7 +2,8 @@ import { _ } from "./util.js";
 export default class RenderManager {
   constructor() {}
 
-  renderLastChild(parent, template) {
+  renderPage(parent, template) {
+    _.$Remove(".changeable-area");
     parent.insertAdjacentHTML("beforeend", template);
   }
 }

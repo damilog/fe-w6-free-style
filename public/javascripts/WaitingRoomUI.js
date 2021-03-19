@@ -18,7 +18,6 @@ export default class WaitingRoomUI {
       "click",
       this.drawWaitingRoom.bind(this) //draw 전에 포괄할만한 메소드필요
     );
-    this.getStationListByLines();
   }
 
   socketOnWaitingUser() {
@@ -35,23 +34,21 @@ export default class WaitingRoomUI {
   }
 
   drawWaitingRoom() {
-    _.$Remove(".changeable-area");
-    this.renderManager.renderLastChild(
-      this.$boardContainer,
-      this.makeTemplate()
-    );
+    this.renderManager.renderPage(this.$boardContainer, this.makeTemplate());
     //여기부터 분리필요
     this.socketOnWaitingUser();
     this.drawLineInfoOnBtn.call(this);
     this.onEvent();
+    this.getStationListByLines();
     // this.prepareNextPage(); 원래 있던 곳..
   }
 
   prepareNextPage() {
+    console.log(this.lineNum, this.bet);
     const gameUI = new GameUI(
       this.$boardContainer,
       this.subwayJsonData,
-      this.lineNum, //undefined?gg
+      this.lineNum,
       this.bet
     );
   }

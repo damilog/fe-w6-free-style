@@ -3,7 +3,7 @@ import RenderManager from "./RenderManager.js";
 import WaitingRoomUI from "./WaitingRoomUI.js";
 
 export default class HomeUI {
-  constructor(boardContainer, json) {
+  constructor(boardContainer, json, socket) {
     this.$boardContainer = boardContainer;
     this.subwayJsonData = json;
     this.socket = io();
@@ -14,10 +14,8 @@ export default class HomeUI {
   }
 
   init() {
-    this.renderManager.renderLastChild(
-      this.$boardContainer,
-      this.makeTemplate()
-    );
+    this.renderManager.renderPage(this.$boardContainer, this.makeTemplate());
+
     this.prepareNextPage();
     this.socket.on("usercount", data => this.drawUserCount(data));
     this.onEvent();
@@ -54,7 +52,7 @@ export default class HomeUI {
   makeTemplate() {
     return `<div class="changeable-area">
     <section class="board-wrap__text">
-      <div class ="board-wrap__text__name">______님은,,</div>
+      <div class ="board-wrap__text__name"> </div>
       <div>어느 역에서 내리시나효?,,( ͡° ͜ʖ ͡°)</div>
     </section>
     <section class="board-wrap__user">
@@ -72,6 +70,4 @@ export default class HomeUI {
       />
     </section></div>`;
   }
-
-  //getSocketSignal() {}
 }

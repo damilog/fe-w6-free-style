@@ -3,7 +3,7 @@ import RenderManager from "./RenderManager.js";
 import WaitingRoomUI from "./WaitingRoomUI.js";
 
 export default class HomeUI {
-  constructor(boardContainer, json, socket) {
+  constructor(boardContainer, json) {
     this.$boardContainer = boardContainer;
     this.subwayJsonData = json;
     this.socket = io();
@@ -15,7 +15,6 @@ export default class HomeUI {
 
   init() {
     this.renderManager.renderPage(this.$boardContainer, this.makeTemplate());
-
     this.prepareNextPage();
     this.socket.on("usercount", data => this.drawUserCount(data));
     this.onEvent();

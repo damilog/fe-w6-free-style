@@ -16,17 +16,15 @@ export default class WaitingRoomUI {
   init() {
     _.$(".board-wrap__geton__btn").addEventListener(
       "click",
-      this.drawWaitingRoom.bind(this) //draw 전에 포괄할만한 메소드필요
+      this.setWaitingRoom.bind(this) //draw 전에 포괄할만한 메소드필요
     );
   }
 
-  drawWaitingRoom() {
+  setWaitingRoom() {
     this.getStationListByLines();
     this.renderManager.renderPage(this.$boardContainer, this.makeTemplate());
-    //여기부터 분리필요
     this.socketOnWaitingUser();
     this.onEvent();
-
     this.drawLineInfoOnBtn.call(this);
     // this.prepareNextPage(); 원래 있던 곳..
   }

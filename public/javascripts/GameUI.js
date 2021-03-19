@@ -15,11 +15,11 @@ export default class GameUI {
   init() {
     _.$(".board-wrap__start__btn").addEventListener(
       "click",
-      this.drawGame.bind(this)
+      this.setGame.bind(this)
     );
   }
 
-  async drawGame() {
+  async setGame() {
     this.renderManager.renderPage(this.$boardContainer, this.makeTemplate());
     this.socketOnUserList();
     this.onEvent();
@@ -28,7 +28,7 @@ export default class GameUI {
     const socket = io();
 
     socket.on("userList", function (users) {
-      // this.userList = users; //이게 안됨
+      // this.userList = users; //작동x
       const template = users.reduce((acc, user) => {
         return acc + `<li class="borad-wrap__user__list__li">${user}</li>`;
       }, "");

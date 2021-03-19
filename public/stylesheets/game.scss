@@ -65,7 +65,7 @@ $line-colors: (
 }
 
 .board-wrap__answer {
-  height: 150px;
+  height: 100px;
   text-align: center;
 
   &__user,
@@ -87,8 +87,9 @@ $line-colors: (
 }
 
 .board-wrap__result {
-  &__text {
-  }
+  text-align: center;
+  font-size: 30px;
+  color: #f51361;
 }
 
 .user-turn {

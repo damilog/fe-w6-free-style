@@ -16,6 +16,7 @@ app.use("/lines", linesRouter);
 const userList = [];
 const answerList = [];
 let user;
+let bet;
 let setting;
 
 io.on("connection", socket => {
@@ -29,6 +30,7 @@ io.on("connection", socket => {
   });
 
   socket.on("settingGame", data => {
+    bet = data["bet"];
     setting = data;
   });
 
@@ -40,6 +42,7 @@ io.on("connection", socket => {
   socket.emit("waitingUser", user);
   socket.emit("loadSettingGame", setting);
   socket.emit("userList", userList);
+  socket.emit("bet", bet);
 });
 
 server.listen(3000, function () {

@@ -7,6 +7,11 @@ const _ = {
   },
 };
 
+const delay = ms =>
+  new Promise(resolve => {
+    setTimeout(() => resolve(ms), ms);
+  });
+
 //선택자에 해당하는 첫번째 element를 반환한다. 그럼 선택자로 해당 엘리먼트를 어떻게 조작?
 //window -> dom 탐색 -> 계속 내려가면서 그 셀렉터 명을 가지고 있는지 찾음.. 찾으면 바로 반환..
 
@@ -42,4 +47,4 @@ const qs = selector => {
 
 const qa = () => {};
 
-export { _, qs, qa };
+export { _, delay };

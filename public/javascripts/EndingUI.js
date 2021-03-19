@@ -22,7 +22,6 @@ export default class EndingUI {
   }
 
   async prepareNextPage() {
-    await _.delay(2000);
     const homeUI = new HomeUI(this.$boardContainer, this.subwayJsonData);
   }
 

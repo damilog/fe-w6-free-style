@@ -7,7 +7,6 @@ export default class GameUI {
     this.$boardContainer = boardContainer;
     this.subwayJsonData = json;
     this.renderManager = new RenderManager();
-    this.finished = false;
     this.line = line;
     this.bet = bet;
     this.userList;
@@ -23,57 +22,9 @@ export default class GameUI {
 
   async drawGame() {
     this.renderManager.renderPage(this.$boardContainer, this.makeTemplate());
-
-    this.socketOnWaitingUser();
-    this.socketOnloadSettingGame();
     this.socketOnUserList();
-
     this.onEvent();
   }
-
-  onEvent() {
-    _.$(".board-wrap__answer__btn").addEventListener(
-      "click",
-      this.checkEnteredStation.bind(this) //
-    );
-  }
-
-  test() {}
-
-  async checkEnteredStation() {
-    const $blockWrap = _.$(".borad-wrap__game__wrap");
-    const currentInput = _.$(".board-wrap__answer__input").value;
-    let incorrectAnswerClass;
-
-    if (!this.isCorrect(currentInput)) {
-      incorrectAnswerClass = "incorrect-answer";
-      this.drawIncorrectAnswerResult();
-      _.$(".board-wrap__answer__input").disabled = true;
-      _.$(".board-wrap__answer__btn").disabled = true;
-      this.finished = true;
-      await delay(2000);
-      this.prepareNextPage();
-    } else {
-      incorrectAnswerClass = "";
-    }
-
-    const template = `<div class="borad-wrap__game__wrap__line line${this.line} ${incorrectAnswerClass}">
-    <span class="borad-wrap__game__wrap__line__text">
-      ${currentInput}
-    </span>
-  </div> `;
-
-    $blockWrap.insertAdjacentHTML("beforeend", template);
-  }
-
-  socketOnloadSettingGame() {
-    const socket = io();
-    socket.on("loadSettingGame", function ({ line, bet }) {
-      //   this.line = line; 여기 안먹힘;
-      //   this.bet = bet;
-    });
-  }
-
   socketOnUserList() {
     const socket = io();
 
@@ -87,32 +38,39 @@ export default class GameUI {
     });
   }
 
-  socketOnWaitingUser() {
-    const socket = io();
-    socket.on("waitingUser", function (data) {
-      _.$(".board-wrap__answer__user").textContent = `${data}`;
-    });
+  onEvent() {
+    _.$(".board-wrap__answer__btn").addEventListener(
+      "click",
+      this.checkEnteredStation.bind(this)
+    );
   }
 
-  socketEmitAnswer(input) {
-    const socket = io();
-    socket.emit("answer", input);
+  drawAnswerList(className, answer) {
+    const $blockWrap = _.$(".borad-wrap__game__wrap");
+    const template = `<div class="borad-wrap__game__wrap__line line${this.line} ${className}">
+    <span class="borad-wrap__game__wrap__line__text">
+      ${answer}
+    </span>
+  </div> `;
+    $blockWrap.insertAdjacentHTML("beforeend", template);
   }
 
-  socketOnAnswerList(input) {
-    const socket = io();
-    socket.on("answerList", function (answerList) {});
-  }
+  async checkEnteredStation() {
+    const currentInput = _.$(".board-wrap__answer__input").value;
+    let incorrectAnswerClass;
 
-  drawUserList(data) {
-    const userListTemplate = this.drawUserInGame(data);
-    _.$(".wrap__user__list").innerHTML(userListTemplate);
-  }
-
-  drawUserInGame(users) {
-    return users.reduce((acc, user) => {
-      return acc + `<li class="borad-wrap__user__list__li">${user}</li>`;
-    }, "");
+    if (!this.isCorrect(currentInput)) {
+      incorrectAnswerClass = "incorrect-answer";
+      this.drawIncorrectAnswerResult();
+      this.drawAnswerList(incorrectAnswerClass, currentInput);
+      _.$(".board-wrap__answer__input").disabled = true;
+      _.$(".board-wrap__answer__btn").disabled = true;
+      await delay(2000);
+      this.prepareNextPage();
+    } else {
+      incorrectAnswerClass = "";
+      this.drawAnswerList(incorrectAnswerClass, currentInput);
+    }
   }
 
   isCorrect(answer) {
@@ -145,4 +103,14 @@ export default class GameUI {
       <section class="board-wrap__result"></section>
     </div>`;
   }
+  ///---보류-------------
+  // socketEmitAnswer(input) {
+  //   const socket = io();
+  //   socket.emit("answer", input);
+  // }
+
+  // socketOnAnswerList(input) {
+  //   const socket = io();
+  //   socket.on("answerList", function (answerList) {});
+  // }
 }

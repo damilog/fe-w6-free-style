@@ -37,9 +37,10 @@ export default class WaitingRoomUI {
     this.renderManager.renderPage(this.$boardContainer, this.makeTemplate());
     //여기부터 분리필요
     this.socketOnWaitingUser();
-    this.drawLineInfoOnBtn.call(this);
+
     this.onEvent();
     this.getStationListByLines();
+    this.drawLineInfoOnBtn.call(this);
     // this.prepareNextPage(); 원래 있던 곳..
   }
 

@@ -3,12 +3,11 @@ import RenderManager from "./RenderManager.js";
 import EndingUI from "./EndingUI.js";
 
 export default class GameUI {
-  constructor(boardContainer, json, line, bet) {
+  constructor(boardContainer, json, line) {
     this.$boardContainer = boardContainer;
     this.subwayJsonData = json;
     this.renderManager = new RenderManager();
     this.line = line;
-    this.bet = bet;
     this.userList;
     this.init();
   }
@@ -78,7 +77,7 @@ export default class GameUI {
   }
 
   prepareNextPage() {
-    const endingUI = new EndingUI(this.$boardContainer, this.subwayJsonData);
+    const endingUI = new EndingUI(this.$boardContainer);
   }
 
   drawIncorrectAnswerResult() {

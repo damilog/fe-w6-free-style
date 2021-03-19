@@ -1,6 +1,5 @@
 import { _ } from "./util.js";
 import JSONManager from "./JSONManager.js";
-import socketManager from "./SocketManager.js";
 import HomeUI from "./HomeUI.js";
 
 async function init() {

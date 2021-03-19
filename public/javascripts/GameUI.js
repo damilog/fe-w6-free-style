@@ -69,6 +69,7 @@ export default class GameUI {
     } else {
       incorrectAnswerClass = "";
       this.drawAnswerList(incorrectAnswerClass, currentInput);
+      _.$(".board-wrap__answer__input").value = "";
     }
   }
 

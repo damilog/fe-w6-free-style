@@ -1,7 +1,6 @@
 import { _ } from "./util.js";
 import RenderManager from "./RenderManager.js";
 import HomeUI from "./HomeUI.js";
-import SocketManager from "./SocketManager.js";
 
 export default class EndingUI {
   constructor(boardContainer) {
@@ -11,13 +10,13 @@ export default class EndingUI {
   }
 
   async init() {
-    await this.drawEnding();
+    await this.setEnding();
     this.socketOnWaitingUser();
     this.socketOnBet();
     this.onEvent();
   }
 
-  drawEnding() {
+  setEnding() {
     this.renderManager.renderPage(this.$boardContainer, this.makeTemplate());
   }
 

@@ -22,8 +22,10 @@ export default class GameUI {
   async setGame() {
     this.renderManager.renderPage(this.$boardContainer, this.makeTemplate());
     this.socketOnUserList();
+    this.socketOnUser();
     this.onEvent();
   }
+
   socketOnUserList() {
     const socket = io();
 
@@ -34,6 +36,13 @@ export default class GameUI {
       }, "");
       const $wrap = _.$(".borad-wrap__user__list");
       $wrap.insertAdjacentHTML("beforeend", template);
+    });
+  }
+
+  socketOnUser() {
+    const socket = io();
+    socket.on("waitingUser", function (data) {
+      _.$(".board-wrap__answer__user").textContent = data;
     });
   }
 
